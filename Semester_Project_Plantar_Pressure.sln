@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32210.238
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Semester_Project_Plantar_Pressure", "Semester_Project_Plantar_Pressure.csproj", "{37C54640-89E2-4579-BDE6-C6AC3DEA5012}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1BA84500-38E0-4C06-92C2-0516FDD47208}"
+	ProjectSection(SolutionItems) = preProject
+		accurate_timer.cs = accurate_timer.cs
+		color_redefinition.cs = color_redefinition.cs
+		display.cs = display.cs
+		Sensor_communication.cs = Sensor_communication.cs
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{37C54640-89E2-4579-BDE6-C6AC3DEA5012}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37C54640-89E2-4579-BDE6-C6AC3DEA5012}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37C54640-89E2-4579-BDE6-C6AC3DEA5012}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37C54640-89E2-4579-BDE6-C6AC3DEA5012}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4B761F3A-A164-4708-8411-5BED490E572B}
+	EndGlobalSection
+EndGlobal

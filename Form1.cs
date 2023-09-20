@@ -1,0 +1,564 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace Semester_Project_Plantar_Pressure
+{
+    public partial class Form1 : Form
+    {
+        private Recording rec = new Recording();
+        private Display disp = new Display();
+        private bool rec_state = false;
+        private bool cont_state = false;
+        private int loaded_time_stamp = 0;
+        private System.Threading.Timer stateTimer;
+        private Graphics graph;
+        private object lockObject = new object();
+        private string file_path = "";
+        private Settings_form settings_form = new Settings_form();
+        private ValvesSate valves_states;
+        private int nbr_info;
+        float[] last_foot = new float[Feet_Info.nb_sensors];
+
+        private AccurateTimer capture_timer = new AccurateTimer(null, null, -1);
+        private MyStopwatch rec_length = new MyStopwatch(new TimeSpan(0));
+        public List<Tuple<int, float[]>> sensor_values = new List<Tuple<int, float[]>>();
+
+        public Form1()
+        {
+            InitializeComponent();
+            nbr_info = data_table.RowCount;
+
+            try
+            {
+                TextReader tr = new StreamReader("area_preferences.txt");
+                Display.read_regions(tr.ReadToEnd());
+                tr.Close();
+
+                tr = new StreamReader("pmi_preferences.txt");
+                string[] pmi_regions = { tr.ReadLine(), tr.ReadLine(), tr.ReadLine(), tr.ReadLine(), tr.ReadLine() };
+                Display.read_pmi_regions(pmi_regions);
+                tr.Close();
+
+                settings_form.refresh_bluetooth();
+                graph = drawing_pannel.CreateGraphics();
+
+                foreach (var reg_name in Feet_Info.foot_areas_names)
+                {
+                    RowStyle temp = data_table.RowStyles[0];
+                    data_table.RowCount++;
+                    data_table.RowStyles.Add(new RowStyle(temp.SizeType, temp.Height));
+                    data_table.Controls.Add(new Label() { Text = reg_name + " load" }, 0, data_table.RowCount - 1);
+                    data_table.Controls.Add(new Label() { Text = " " }, 1, data_table.RowCount - 1);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            };
+        }
+
+        private void btn_load_frame_Click(object sender, EventArgs e)
+        {
+            loaded_time_stamp = (int)num_disp_time.Value;
+            if (loaded_time_stamp > sld_rec_time.Maximum) { loaded_time_stamp = sld_rec_time.Maximum; }
+            sld_rec_time.Value = loaded_time_stamp;
+            txt_frame_count.Text = rec.current_col.ToString() + '/' + rec.total_columns.ToString();
+            Tuple<int, Feet_Info> tmp = rec.find_frame(loaded_time_stamp);
+            update_display(tmp.Item2);
+        }
+
+        private void btn_start_stop_Click(object sender, EventArgs e)
+        {
+            rec_state = !rec_state;
+            Sensors.error_message = "";
+
+            if (rec.rec_frequecy < 11 && rec_state)
+            {
+                lbl_rec_status.Text = "⬤ Rec";
+                lbl_rec_status.ForeColor = Color.Red;
+
+                if (!cont_state)
+                {
+                    cont_state = true;
+                    tmr_update_screen.Start();
+                    txt_cont_read.Text = "▶";
+                    txt_cont_read.ForeColor = Color.Green;
+                }
+
+                start_capture_timer(1000 / rec.rec_frequecy);
+            }
+            else if (rec.rec_frequecy < 11 && !rec_state)
+            {
+                lbl_rec_status.Text = "■ Paused";
+                lbl_rec_status.ForeColor = Color.Black;
+
+                if (cont_state)
+                {
+                    cont_state = false;
+                    tmr_update_screen.Stop();
+                    txt_cont_read.Text = "■";
+                    txt_cont_read.ForeColor = Color.Red;
+                }
+                bar_rec_data_calc.Visible = true;
+                txt_calc_rec_data.Visible = true;
+
+                stop_capture_timer();
+
+                wrk_rec_data_calc.RunWorkerAsync();
+            }
+            else if (rec.rec_frequecy > 10 && rec_state)
+            {
+                lbl_rec_status.Text = "⬤ Rec";
+                lbl_rec_status.ForeColor = Color.Red;
+
+                tmr_refresh_text.Stop();
+                graph.Clear(Color.White);
+
+                txt_hf_rec_msg.Visible = true;
+                start_capture_timer(1000 / rec.rec_frequecy);
+            }
+            else
+            {
+                tmr_refresh_text.Start();
+                lbl_rec_status.Text = "■ Paused";
+                lbl_rec_status.ForeColor = Color.Black;
+                txt_hf_rec_msg.Visible = false;
+                bar_rec_data_calc.Visible = true;
+                txt_calc_rec_data.Visible = true;
+                stop_capture_timer();
+
+                wrk_rec_data_calc.RunWorkerAsync();
+            }
+
+        }
+        private void MenuItem_load_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog load_dlg = new OpenFileDialog();
+            load_dlg.Title = "Load File";
+            load_dlg.Filter = "txt files (*.txt)|*.txt|All files (*.*)|*.*";
+            if (load_dlg.ShowDialog() == DialogResult.OK)
+            {
+                //try
+                {
+                    string file_text = File.ReadAllText(load_dlg.FileName);
+                    var sensor_list = File_manager.deformat_feet_info(file_text);
+                    rec.total_columns = sensor_list.Count;
+
+                    rec_length = new MyStopwatch(new TimeSpan(0, 0, 0, 0, sensor_list[rec.total_columns - 1].Item1));
+                    sensor_values = sensor_list;
+                    bar_rec_data_calc.Visible = true;
+                    txt_calc_rec_data.Visible = true;
+                    if (!wrk_rec_data_calc.IsBusy)
+                        wrk_rec_data_calc.RunWorkerAsync();
+
+                    MessageBox.Show("Successfull loading of file: " + load_dlg.FileName);
+                }
+                //catch (Exception ex)
+                {
+                    //MessageBox.Show(ex.Message);
+                }
+
+            }
+        }
+        private void MenuItem_save_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                File.WriteAllText(file_path, File_manager.format_feet_info(rec.frame_list, rec.total_columns));
+                MessageBox.Show("Recording saved successfully");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        private void MenuItem_saveas_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog save_dlg = new SaveFileDialog();
+            save_dlg.Title = "SaveFileDialog Recording";
+            save_dlg.Filter = "Text File|*.txt";
+            save_dlg.FileName = "recording.txt";
+
+            if (save_dlg.ShowDialog() == DialogResult.OK)
+            {
+                file_path = save_dlg.FileName;
+                try
+                {
+                    File.WriteAllText(file_path, File_manager.format_feet_info(rec.frame_list, rec.total_columns));
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message);
+                }
+            }
+        }
+
+        private void btn_reset_Click(object sender, EventArgs e)
+        {
+            Sensors.error_message = "";
+            if (rec_state)
+            {
+                rec_state = false;
+                stop_capture_timer();
+            }
+            rec.reset_recording();
+            reset_stopwatch();
+
+            lbl_rec_status.Text = "■ Paused";
+            lbl_rec_status.ForeColor = Color.Black;
+
+        }
+
+        private void btn_cont_read_Click(object sender, EventArgs e)
+        {
+            Sensors.error_message = "";
+            if (txt_hf_rec_msg.Visible)
+            {
+                MessageBox.Show("High Frequency Recording in progress. Cannot display live sensor values.");
+            }
+            else
+            {
+                cont_state = !cont_state;
+                if (cont_state)
+                {
+                    tmr_update_screen.Start();
+                    txt_cont_read.Text = "▶";
+                    txt_cont_read.ForeColor = Color.Green;
+                }
+                else
+                {
+                    tmr_update_screen.Stop();
+                    txt_cont_read.Text = "■";
+                    txt_cont_read.ForeColor = Color.Red;
+                }
+            }
+
+        }
+
+        private void sld_rec_time_Scroll(object sender, EventArgs e)
+        {
+            loaded_time_stamp = (int)sld_rec_time.Value;
+            txt_frame_count.Text = rec.current_col.ToString() + '/' + rec.total_columns.ToString();
+
+            Tuple<int, Feet_Info> tmp = rec.find_frame(loaded_time_stamp);
+            update_display(tmp.Item2);
+        }
+
+        private void num_disp_time_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Apply_rec_fr_Click(object sender, EventArgs e)
+        {
+            if (rec_state)
+            {
+                MessageBox.Show("Recording in progress, cannot change frequency now");
+            }
+            else
+            {
+                rec.rec_frequecy = (int)num_rec_fr.Value;
+            }
+
+        }
+        private void tmr_refresh_text_Tick(object sender, EventArgs e)
+        {
+            TimeSpan rec_l_time = TimeSpan.FromMilliseconds(rec_length.ElapsedMilliseconds);
+
+            string rec_len_str = rec_l_time.ToString(@"mm\:ss\:fff");
+            lbl_rec_len.Text = rec_len_str;
+
+            sld_rec_time.Maximum = (int)rec_length.ElapsedMilliseconds;
+            txt_max_length.Text = rec_len_str;
+
+            TimeSpan cursor_time = TimeSpan.FromMilliseconds(sld_rec_time.Value);
+            txt_cursor_val.Text = cursor_time.ToString(@"mm\:ss\:fff");
+
+            txt_frame_count.Text = rec.current_col.ToString() + '/' + rec.total_columns.ToString();
+
+            if (file_path == "")
+            {
+                MenuItem_save.Enabled = false;
+            }
+            else
+            {
+                MenuItem_save.Enabled = true;
+            }
+
+            if (Sensors.btClient.Connected)
+            {
+                lbl_connection_status.Text = "Connected";
+                lbl_connection_status.ForeColor = Color.Green;
+            }
+            else
+            {
+                lbl_connection_status.Text = "Not connected";
+                lbl_connection_status.ForeColor = Color.Red;
+            }
+
+            if (Settings_form.changes_made == true)
+            {
+                Settings_form.changes_made = false;
+                data_table.SuspendLayout();
+
+                while (data_table.RowCount > nbr_info)
+                {
+                    int row = data_table.RowCount - 1;
+                    for (int i = 0; i < data_table.ColumnCount; i++)
+                    {
+                        Control c = data_table.GetControlFromPosition(i, row);
+                        data_table.Controls.Remove(c);
+                        //c.Dispose();
+                    }
+
+                    data_table.RowStyles.RemoveAt(row);
+                    data_table.RowCount--;
+                }
+
+                data_table.ResumeLayout(false);
+                data_table.PerformLayout();
+
+                foreach (var reg_name in Feet_Info.foot_areas_names)
+                {
+                    RowStyle temp = data_table.RowStyles[data_table.RowCount - 1];
+                    data_table.RowCount++;
+                    data_table.RowStyles.Add(new RowStyle(temp.SizeType, temp.Height));
+                    data_table.Controls.Add(new Label() { Text = reg_name + " load" }, 0, data_table.RowCount - 1);
+                    data_table.Controls.Add(new Label() { Text = reg_name + " " }, 1, data_table.RowCount - 1);
+                }
+            }
+
+        }
+
+        private void update_display(Feet_Info feet)
+        {
+            if (!wrk_screen_update.IsBusy)
+                wrk_screen_update.RunWorkerAsync(argument: feet);
+        }
+
+        private void toolStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+
+        }
+
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Modifiers == Keys.Control && e.KeyCode == Keys.S)
+            {
+                if (file_path == "") { MenuItem_saveas_Click(null, null); }
+                else { MenuItem_save_Click(null, null); }
+            }
+        }
+
+        private void parametersToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            settings_form = new Settings_form();
+            settings_form.Show();
+        }
+
+        private void wrk_rec_data_calc_DoWork(object sender, DoWorkEventArgs e)
+        {
+
+            int counter = 1;
+            Thread.Sleep(100);
+            rec.total_columns = sensor_values.Count();
+
+            foreach (var frame in sensor_values)
+            {
+                wrk_rec_data_calc.ReportProgress(counter * 100 / rec.total_columns);
+                counter++;
+                Feet_Info tmp = new Feet_Info(frame.Item2);
+                tmp.calculate_var();
+                rec.frame_list.Add(new Tuple<int, Feet_Info>(frame.Item1, tmp));
+            }
+        }
+
+        private void wrk_rec_data_calc_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            bar_rec_data_calc.Value = e.ProgressPercentage;
+        }
+
+        private void wrk_rec_data_calc_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            bar_rec_data_calc.Visible = false;
+            txt_calc_rec_data.Visible = false;
+            stop_capture_timer();
+        }
+
+        private void txt_calc_rec_data_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        public void reset_stopwatch()
+        {
+            rec_length.Reset();
+            sensor_values = new List<Tuple<int, float[]>>();
+        }
+        public void stop_capture_timer()
+        {
+            if (capture_timer.IsRunning())
+            {
+                capture_timer.Stop();
+            }
+            if (rec_length.IsRunning)
+            {
+                rec_length.Stop();
+            }
+        }
+
+        public void start_capture_timer(int delay)
+        {
+            rec_length.Start();
+            capture_timer = new AccurateTimer(this, new Action(rec_timer_tick), delay);
+        }
+        private void rec_timer_tick()
+        {
+            if (!worker_read_bt.IsBusy)
+                worker_read_bt.RunWorkerAsync();
+        }
+
+        private bool isParsing = false;
+        private Stopwatch tmp_stopwatch = new Stopwatch();
+        private Stopwatch tmp_total_stopwatch = new Stopwatch();
+        private async void worker_read_bt_DoWork(object sender, DoWorkEventArgs e)
+        {
+
+            float[] new_feet;
+            if (Sensors.btClient.Connected)
+            {
+                new_feet = await Settings_form.read_btAsync();
+                new_feet.CopyTo(last_foot,0);
+                if (Sensors.error_message != "")
+                {
+                    MessageBox.Show(Sensors.error_message, "Bluetooth error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+
+            }
+            else { new_feet = Feet_Info.empty_feet().sensor_list; }
+
+            sensor_values.Add(new Tuple<int, float[]>((int)rec_length.ElapsedMilliseconds, new_feet));
+        }
+
+        private void wrk_screen_update_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            Feet_Info feet = (Feet_Info)e.Result;
+            List<Color> palettecolors = ChartColorPallets.Fire;
+
+
+            data_table.SuspendLayout();
+            txt_mean.Text = feet.feet_data.mean.ToString();
+            txt_var.Text = feet.feet_data.std.ToString();
+            txt_peak_p.Text = feet.feet_data.peak_val.ToString();
+            txt_pmi.Text = feet.feet_data.pmi.ToString();
+            txt_pr.Text = feet.feet_data.power_ratio.ToString();
+
+            for (int i = 0; i < Feet_Info.foot_areas_names.Length; i++)
+            {
+                data_table.GetControlFromPosition(1, i + nbr_info).Text = feet.feet_data.area_load[i].ToString();
+            }
+
+            data_table.ResumeLayout(false);
+            data_table.PerformLayout();
+
+            bool isChecked = btn_display_all.Checked;
+
+            BoxDataCollection box_data = new BoxDataCollection(feet.feet_data, isChecked);
+            HistogramDataCollection hist_pr_data = new HistogramDataCollection(feet.feet_data.area_pr, feet.feet_data.power_ratio, isChecked);
+            HistogramDataCollection hist_load_data = new HistogramDataCollection(feet.feet_data.area_load, feet.feet_data.mean * Feet_Info.nb_sensors, isChecked);
+
+            chrt_mean_var.Series[0].Points.DataBind(box_data, "Region", "LowWhisker,UpWhisker,LowWBox,UpBox,Average,Median", null);
+            load_histogram.Series[0].Points.DataBind(hist_load_data, "Region", "box_height", null);
+            pr_histogram.Series[0].Points.DataBind(hist_pr_data, "Region", "box_height", null);
+
+            int index = 0;
+
+            foreach (var single_hist in load_histogram.Series[0].Points)
+            {
+                single_hist.Color = palettecolors[index];
+                index++;
+            }
+            index = 0;
+            foreach (var single_hist in pr_histogram.Series[0].Points)
+            {
+                single_hist.Color = palettecolors[index];
+                index++;
+            }
+            index = 0;
+            foreach (var single_box in chrt_mean_var.Series[0].Points)
+            {
+                single_box.Color = palettecolors[index];
+                index++;
+            }
+        }
+
+        private void wrk_screen_update_DoWork(object sender, DoWorkEventArgs e)
+        {
+            Feet_Info feet = (Feet_Info)e.Argument;
+            e.Result = feet;
+            lock (lockObject)
+            {
+                disp.draw_feet(graph, feet.sensor_list);
+            }
+        }
+
+        private async void tmr_update_screen_Tick(object sender, EventArgs e)
+        {
+            Feet_Info tmp;
+            if (!rec_state)
+            {
+                tmp = new Feet_Info(await Settings_form.read_btAsync());
+            } else
+            {
+                tmp = new Feet_Info(last_foot);
+            }
+            tmp.calculate_var();
+            if (!wrk_screen_update.IsBusy)
+                wrk_screen_update.RunWorkerAsync(argument: tmp);
+        }
+
+
+        private void btn_calc_data_Click(object sender, EventArgs e)
+        {
+            rec.total_columns = sensor_values.Count();
+            int counter = 0;
+            rec.frame_list.Clear();
+            foreach (var frame in sensor_values)
+            {
+                counter++;
+                Feet_Info tmp = new Feet_Info(frame.Item2);
+                tmp.calculate_var();
+                rec.frame_list.Add(new Tuple<int, Feet_Info>(frame.Item1, tmp));
+            }
+        }
+
+        private void btn_clear_panel_Click(object sender, EventArgs e)
+        {
+            lock (lockObject)
+            {
+                graph.Clear(Color.White);
+            }
+        }
+
+        private void label9_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void valvesSettingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            valves_states = new ValvesSate();
+            valves_states.Show();
+        }
+    }
+}
+
