@@ -12,6 +12,11 @@ namespace Semester_Project_Plantar_Pressure
 {
     public partial class ValvesSate : Form
     {
+        public Sensors sensor_obj1 = new Sensors();
+        public byte[] bytes = Sensors.valve_state_bytes;
+        private Timer timer_valve_state;
+        private CheckBox[] checkBoxArray;
+
         public ValvesSate()
         {
             InitializeComponent();
@@ -48,8 +53,76 @@ namespace Semester_Project_Plantar_Pressure
             checkBox30.Checked = false;
             checkBox31.Checked = false;
             */
+
+            timer_valve_state = new Timer();
+            timer_valve_state.Interval = 1000;
+            timer_valve_state.Enabled = true;
+            timer_valve_state.Tick += new EventHandler(timer_valve_state_Tick);
+
+            checkBoxArray = new CheckBox[31];
+
+            checkBoxArray[0] = this.checkBox1;
+            checkBoxArray[1] = this.checkBox2;
+            checkBoxArray[2] = this.checkBox3;
+            checkBoxArray[3] = this.checkBox4;
+            checkBoxArray[4] = this.checkBox5;
+            checkBoxArray[5] = this.checkBox6;
+            checkBoxArray[6] = this.checkBox7;
+            checkBoxArray[7] = this.checkBox8;
+            checkBoxArray[8] = this.checkBox9;
+            checkBoxArray[9] = this.checkBox10;
+            checkBoxArray[10] = this.checkBox11;
+            checkBoxArray[11] = this.checkBox12;
+            checkBoxArray[12] = this.checkBox13;
+            checkBoxArray[13] = this.checkBox14;
+            checkBoxArray[14] = this.checkBox15;
+            checkBoxArray[15] = this.checkBox16;
+            checkBoxArray[16] = this.checkBox17;
+            checkBoxArray[17] = this.checkBox18;
+            checkBoxArray[18] = this.checkBox19;
+            checkBoxArray[19] = this.checkBox20;
+            checkBoxArray[20] = this.checkBox21;
+            checkBoxArray[21] = this.checkBox22;
+            checkBoxArray[22] = this.checkBox23;
+            checkBoxArray[23] = this.checkBox24;
+            checkBoxArray[24] = this.checkBox25;
+            checkBoxArray[25] = this.checkBox26;
+            checkBoxArray[26] = this.checkBox27;
+            checkBoxArray[27] = this.checkBox28;
+            checkBoxArray[28] = this.checkBox29;
+            checkBoxArray[29] = this.checkBox30;
+            checkBoxArray[30] = this.checkBox31;
+
+
         }
 
+        public void set_all_valves(byte[] abytes)
+        {
+            ulong set_valves_uint32 = BitConverter.ToUInt32(abytes, 0);
+
+            // set_valves_uint32 = 0x0F5F0F5F0F;
+
+            for (int i = 0; i < Feet_Info.nb_sensors; i++)
+            {
+                bool isBitSet = (set_valves_uint32 & (1UL << i)) != 0;
+
+                if (isBitSet)
+                {
+                    checkBoxArray[i].Checked = true;
+                    sensor_obj1.set_valve(i, checkBoxArray[i].Checked);
+                }
+                else
+                {
+                    checkBoxArray[i].Checked = false;
+                    sensor_obj1.set_valve(i, checkBoxArray[i].Checked);
+                }
+            }
+        }
+
+        private void timer_valve_state_Tick(object sender, EventArgs e)
+        {
+            set_all_valves(bytes);
+        }
         private void ValvesSate_Load(object sender, EventArgs e)
         {
 
@@ -243,5 +316,7 @@ namespace Semester_Project_Plantar_Pressure
             checkBox31.Checked = checkBox32.Checked;
             Settings_form.bt_sensor.set_valve(0, checkBox32.Checked);
         }
+
+
     }
 }

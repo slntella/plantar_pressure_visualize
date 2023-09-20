@@ -9,6 +9,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Text;
+using System.Net.NetworkInformation;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Button;
 
 namespace Semester_Project_Plantar_Pressure
 {
@@ -19,13 +21,18 @@ namespace Semester_Project_Plantar_Pressure
         public static BluetoothClient btClient = new BluetoothClient();
         public static List<string[]> bt_row_list = new List<string[]>();
         public static string error_message = "";
+        public static string data_battery = "100%";
         private static uint UART_RX_IDX_MAX = 2047;
         static public bool connection_established = false;
         private float[] numbers = new float[Feet_Info.nb_sensors];
+        public static byte[] valve_state_bytes = new byte[4];
         private byte[] uart_rx_buf = new byte[UART_RX_IDX_MAX+1];
         private uint sbuf_write = 0; //pointeur d'écriture dans le buffer
         private uint sbuf_read = 0; //pointeur de lecture dans le buffer
         private uint Overflow = 0;
+        private static int counterCycles = 0;
+
+
         private float[] deserialise_binary(byte[] incomming_stream)
         {
             float[] float_output = new float[(int)incomming_stream.Length / sizeof(float)];
@@ -97,6 +104,8 @@ namespace Semester_Project_Plantar_Pressure
                                     for (int i = 0; i < byteReceived.Length; i++) byteReceived[i] = uart_rx_buf[(sbuf_read + i) & UART_RX_IDX_MAX];
                                     numbers = deserialise_binary(byteReceived);
                                     sbuf_read = sbuf_read + (uint)byteReceived.Length + sizeof(float);
+
+                                    //get here the last float which is going to be the battery level
                                     read++;
                                 }
 
@@ -117,8 +126,24 @@ namespace Semester_Project_Plantar_Pressure
             {
                 numbers = Feet_Info.empty_feet().sensor_list;
             }
+            valve_state_bytes[0] = 0x0F;
+            valve_state_bytes[1] = 0x0F;
+            valve_state_bytes[2] = 0x0F;
+            valve_state_bytes[3] = 0x0F;
 
             return numbers;
+        }
+
+        public string set_bat_level()
+        {
+            if(counterCycles < 100)
+            {
+                data_battery = $"{counterCycles}%";
+                counterCycles++;
+            }
+            else counterCycles = 0;
+
+            return data_battery;
         }
         public int set_valve(int valveId,bool state)
         {
@@ -145,6 +170,8 @@ namespace Semester_Project_Plantar_Pressure
 
             return 0;
         }
+
+
         public void connect_bt()
         {
 

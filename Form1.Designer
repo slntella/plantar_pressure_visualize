@@ -30,20 +30,20 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea10 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend10 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series13 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series14 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Title title13 = new System.Windows.Forms.DataVisualization.Charting.Title();
-            System.Windows.Forms.DataVisualization.Charting.Title title14 = new System.Windows.Forms.DataVisualization.Charting.Title();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea11 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend11 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series15 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Title title15 = new System.Windows.Forms.DataVisualization.Charting.Title();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea12 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend12 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series16 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Title title16 = new System.Windows.Forms.DataVisualization.Charting.Title();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Title title5 = new System.Windows.Forms.DataVisualization.Charting.Title();
+            System.Windows.Forms.DataVisualization.Charting.Title title6 = new System.Windows.Forms.DataVisualization.Charting.Title();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea5 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend5 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series7 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Title title7 = new System.Windows.Forms.DataVisualization.Charting.Title();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea6 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend6 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series8 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Title title8 = new System.Windows.Forms.DataVisualization.Charting.Title();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripLabel3 = new System.Windows.Forms.ToolStripLabel();
             this.lbl_rec_len = new System.Windows.Forms.ToolStripLabel();
@@ -55,10 +55,6 @@
             this.btn_reset = new System.Windows.Forms.ToolStripButton();
             this.btn_cont_read = new System.Windows.Forms.ToolStripButton();
             this.txt_cont_read = new System.Windows.Forms.ToolStripLabel();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
-            this.toolStripTextBox1 = new System.Windows.Forms.ToolStripLabel();
-            this.toolStripLabelBat = new System.Windows.Forms.ToolStripLabel();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.lbl_connection_status = new System.Windows.Forms.ToolStripStatusLabel();
@@ -68,7 +64,6 @@
             this.MenuItem_save = new System.Windows.Forms.ToolStripMenuItem();
             this.MenuItem_saveas = new System.Windows.Forms.ToolStripMenuItem();
             this.parametersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.valvesSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.num_rec_fr = new System.Windows.Forms.NumericUpDown();
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -114,7 +109,7 @@
             this.btn_calc_data = new System.Windows.Forms.Button();
             this.btn_clear_panel = new System.Windows.Forms.Button();
             this.btn_display_all = new System.Windows.Forms.CheckBox();
-            this.toolStripLabel5 = new System.Windows.Forms.ToolStripLabel();
+            this.valvesSettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -146,11 +141,7 @@
             this.btn_start_stop,
             this.btn_reset,
             this.btn_cont_read,
-            this.txt_cont_read,
-            this.toolStripSeparator2,
-            this.toolStripLabel2,
-            this.toolStripTextBox1,
-            this.toolStripLabel5});
+            this.txt_cont_read});
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Padding = new System.Windows.Forms.Padding(0, 0, 2, 0);
@@ -164,14 +155,12 @@
             this.toolStripLabel3.Name = "toolStripLabel3";
             this.toolStripLabel3.Size = new System.Drawing.Size(104, 36);
             this.toolStripLabel3.Text = "Recording length :";
-            this.toolStripLabel3.Click += new System.EventHandler(this.toolStripLabel3_Click);
             // 
             // lbl_rec_len
             // 
             this.lbl_rec_len.Name = "lbl_rec_len";
             this.lbl_rec_len.Size = new System.Drawing.Size(55, 36);
             this.lbl_rec_len.Text = "00:00:000";
-            this.lbl_rec_len.Click += new System.EventHandler(this.lbl_rec_len_Click);
             // 
             // toolStripSeparator1
             // 
@@ -230,28 +219,6 @@
             this.txt_cont_read.Name = "txt_cont_read";
             this.txt_cont_read.Size = new System.Drawing.Size(17, 36);
             this.txt_cont_read.Text = "■";
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 39);
-            // 
-            // toolStripLabel2
-            // 
-            this.toolStripLabel2.Name = "toolStripLabel2";
-            this.toolStripLabel2.Size = new System.Drawing.Size(91, 36);
-            this.toolStripLabel2.Text = "Battery Charge :";
-            this.toolStripLabel2.Click += new System.EventHandler(this.toolStripLabel2_Click);
-            // 
-            // toolStripTextBox1
-            // 
-            this.toolStripTextBox1.Name = "toolStripTextBox1";
-            this.toolStripTextBox1.Size = new System.Drawing.Size(0, 36);
-            // 
-            // toolStripLabelBat
-            // 
-            this.toolStripLabelBat.Name = "toolStripLabelBat";
-            this.toolStripLabelBat.Size = new System.Drawing.Size(23, 23);
             // 
             // statusStrip1
             // 
@@ -329,13 +296,6 @@
             this.parametersToolStripMenuItem.Size = new System.Drawing.Size(78, 22);
             this.parametersToolStripMenuItem.Text = "Parameters";
             this.parametersToolStripMenuItem.Click += new System.EventHandler(this.parametersToolStripMenuItem_Click);
-            // 
-            // valvesSettingsToolStripMenuItem
-            // 
-            this.valvesSettingsToolStripMenuItem.Name = "valvesSettingsToolStripMenuItem";
-            this.valvesSettingsToolStripMenuItem.Size = new System.Drawing.Size(96, 22);
-            this.valvesSettingsToolStripMenuItem.Text = "Valves Settings";
-            this.valvesSettingsToolStripMenuItem.Click += new System.EventHandler(this.valvesSettingsToolStripMenuItem_Click);
             // 
             // num_rec_fr
             // 
@@ -502,7 +462,7 @@
             this.data_table.Controls.Add(this.txt_mean, 1, 0);
             this.data_table.Controls.Add(this.label7, 0, 0);
             this.data_table.Location = new System.Drawing.Point(838, 188);
-            this.data_table.Margin = new System.Windows.Forms.Padding(2);
+            this.data_table.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.data_table.Name = "data_table";
             this.data_table.RowCount = 5;
             this.data_table.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31F));
@@ -645,18 +605,17 @@
             this.drawing_pannel.BackColor = System.Drawing.SystemColors.Window;
             this.drawing_pannel.Controls.Add(this.txt_hf_rec_msg);
             this.drawing_pannel.Location = new System.Drawing.Point(0, 60);
-            this.drawing_pannel.Margin = new System.Windows.Forms.Padding(2);
+            this.drawing_pannel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.drawing_pannel.Name = "drawing_pannel";
             this.drawing_pannel.Size = new System.Drawing.Size(500, 520);
             this.drawing_pannel.TabIndex = 21;
-            this.drawing_pannel.Paint += new System.Windows.Forms.PaintEventHandler(this.drawing_pannel_Paint);
             // 
             // txt_hf_rec_msg
             // 
             this.txt_hf_rec_msg.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.875F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txt_hf_rec_msg.ForeColor = System.Drawing.SystemColors.WindowFrame;
             this.txt_hf_rec_msg.Location = new System.Drawing.Point(94, 182);
-            this.txt_hf_rec_msg.Margin = new System.Windows.Forms.Padding(2);
+            this.txt_hf_rec_msg.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txt_hf_rec_msg.Multiline = true;
             this.txt_hf_rec_msg.Name = "txt_hf_rec_msg";
             this.txt_hf_rec_msg.Size = new System.Drawing.Size(310, 43);
@@ -668,7 +627,7 @@
             // bar_rec_data_calc
             // 
             this.bar_rec_data_calc.Location = new System.Drawing.Point(609, 540);
-            this.bar_rec_data_calc.Margin = new System.Windows.Forms.Padding(2);
+            this.bar_rec_data_calc.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.bar_rec_data_calc.Name = "bar_rec_data_calc";
             this.bar_rec_data_calc.Size = new System.Drawing.Size(547, 21);
             this.bar_rec_data_calc.TabIndex = 23;
@@ -705,7 +664,7 @@
             this.tabControl1.Controls.Add(this.load_hist);
             this.tabControl1.Controls.Add(this.pr_hist);
             this.tabControl1.Location = new System.Drawing.Point(505, 60);
-            this.tabControl1.Margin = new System.Windows.Forms.Padding(2);
+            this.tabControl1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(328, 395);
@@ -715,9 +674,9 @@
             // 
             this.BoxPlot.Controls.Add(this.chrt_mean_var);
             this.BoxPlot.Location = new System.Drawing.Point(4, 22);
-            this.BoxPlot.Margin = new System.Windows.Forms.Padding(2);
+            this.BoxPlot.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.BoxPlot.Name = "BoxPlot";
-            this.BoxPlot.Padding = new System.Windows.Forms.Padding(2);
+            this.BoxPlot.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.BoxPlot.Size = new System.Drawing.Size(320, 369);
             this.BoxPlot.TabIndex = 0;
             this.BoxPlot.Text = "Box plot";
@@ -728,48 +687,47 @@
             this.chrt_mean_var.BorderlineWidth = 3;
             this.chrt_mean_var.BorderSkin.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.DashDot;
             this.chrt_mean_var.BorderSkin.BorderWidth = 3;
-            chartArea10.Name = "ChartArea1";
-            this.chrt_mean_var.ChartAreas.Add(chartArea10);
-            legend10.Enabled = false;
-            legend10.Name = "Legend1";
-            this.chrt_mean_var.Legends.Add(legend10);
+            chartArea4.Name = "ChartArea1";
+            this.chrt_mean_var.ChartAreas.Add(chartArea4);
+            legend4.Enabled = false;
+            legend4.Name = "Legend1";
+            this.chrt_mean_var.Legends.Add(legend4);
             this.chrt_mean_var.Location = new System.Drawing.Point(0, 0);
-            this.chrt_mean_var.Margin = new System.Windows.Forms.Padding(2);
+            this.chrt_mean_var.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.chrt_mean_var.Name = "chrt_mean_var";
-            series13.BorderWidth = 3;
-            series13.ChartArea = "ChartArea1";
-            series13.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.BoxPlot;
-            series13.LabelBorderWidth = 3;
-            series13.Legend = "Legend1";
-            series13.MarkerBorderWidth = 3;
-            series13.Name = "Mean and std";
-            series13.YValuesPerPoint = 6;
-            series14.ChartArea = "ChartArea1";
-            series14.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastPoint;
-            series14.Legend = "Legend1";
-            series14.Name = "values";
-            this.chrt_mean_var.Series.Add(series13);
-            this.chrt_mean_var.Series.Add(series14);
+            series5.BorderWidth = 3;
+            series5.ChartArea = "ChartArea1";
+            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.BoxPlot;
+            series5.LabelBorderWidth = 3;
+            series5.Legend = "Legend1";
+            series5.MarkerBorderWidth = 3;
+            series5.Name = "Mean and std";
+            series5.YValuesPerPoint = 6;
+            series6.ChartArea = "ChartArea1";
+            series6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastPoint;
+            series6.Legend = "Legend1";
+            series6.Name = "values";
+            this.chrt_mean_var.Series.Add(series5);
+            this.chrt_mean_var.Series.Add(series6);
             this.chrt_mean_var.Size = new System.Drawing.Size(320, 370);
             this.chrt_mean_var.TabIndex = 0;
             this.chrt_mean_var.Text = "chart1";
-            title13.Name = "Title1";
-            title13.Text = "Region statistics";
-            title14.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Bottom;
-            title14.Name = "Title2";
-            title14.Text = "peak_value : high wiskers, min_value : low wiskers, mean : middle bar, Standard D" +
+            title5.Name = "Title1";
+            title5.Text = "Region statistics";
+            title6.Docking = System.Windows.Forms.DataVisualization.Charting.Docking.Bottom;
+            title6.Name = "Title2";
+            title6.Text = "peak_value : high wiskers, min_value : low wiskers, mean : middle bar, Standard D" +
     "eviation : Box limits";
-            this.chrt_mean_var.Titles.Add(title13);
-            this.chrt_mean_var.Titles.Add(title14);
-            this.chrt_mean_var.Click += new System.EventHandler(this.chrt_mean_var_Click);
+            this.chrt_mean_var.Titles.Add(title5);
+            this.chrt_mean_var.Titles.Add(title6);
             // 
             // load_hist
             // 
             this.load_hist.Controls.Add(this.load_histogram);
             this.load_hist.Location = new System.Drawing.Point(4, 22);
-            this.load_hist.Margin = new System.Windows.Forms.Padding(2);
+            this.load_hist.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.load_hist.Name = "load_hist";
-            this.load_hist.Padding = new System.Windows.Forms.Padding(2);
+            this.load_hist.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.load_hist.Size = new System.Drawing.Size(320, 369);
             this.load_hist.TabIndex = 1;
             this.load_hist.Text = "Loads";
@@ -777,32 +735,32 @@
             // 
             // load_histogram
             // 
-            chartArea11.Name = "ChartArea1";
-            this.load_histogram.ChartAreas.Add(chartArea11);
-            legend11.Enabled = false;
-            legend11.Name = "Legend1";
-            this.load_histogram.Legends.Add(legend11);
+            chartArea5.Name = "ChartArea1";
+            this.load_histogram.ChartAreas.Add(chartArea5);
+            legend5.Enabled = false;
+            legend5.Name = "Legend1";
+            this.load_histogram.Legends.Add(legend5);
             this.load_histogram.Location = new System.Drawing.Point(0, 0);
-            this.load_histogram.Margin = new System.Windows.Forms.Padding(2);
+            this.load_histogram.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.load_histogram.Name = "load_histogram";
-            series15.ChartArea = "ChartArea1";
-            series15.Legend = "Legend1";
-            series15.Name = "Series1";
-            this.load_histogram.Series.Add(series15);
+            series7.ChartArea = "ChartArea1";
+            series7.Legend = "Legend1";
+            series7.Name = "Series1";
+            this.load_histogram.Series.Add(series7);
             this.load_histogram.Size = new System.Drawing.Size(320, 370);
             this.load_histogram.TabIndex = 0;
             this.load_histogram.Text = "chart2";
-            title15.Name = "Title1";
-            title15.Text = "Load per region";
-            this.load_histogram.Titles.Add(title15);
+            title7.Name = "Title1";
+            title7.Text = "Load per region";
+            this.load_histogram.Titles.Add(title7);
             // 
             // pr_hist
             // 
             this.pr_hist.Controls.Add(this.pr_histogram);
             this.pr_hist.Location = new System.Drawing.Point(4, 22);
-            this.pr_hist.Margin = new System.Windows.Forms.Padding(2);
+            this.pr_hist.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pr_hist.Name = "pr_hist";
-            this.pr_hist.Padding = new System.Windows.Forms.Padding(2);
+            this.pr_hist.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pr_hist.Size = new System.Drawing.Size(320, 369);
             this.pr_hist.TabIndex = 2;
             this.pr_hist.Text = "power ratio";
@@ -810,24 +768,24 @@
             // 
             // pr_histogram
             // 
-            chartArea12.Name = "ChartArea1";
-            this.pr_histogram.ChartAreas.Add(chartArea12);
-            legend12.Enabled = false;
-            legend12.Name = "Legend1";
-            this.pr_histogram.Legends.Add(legend12);
+            chartArea6.Name = "ChartArea1";
+            this.pr_histogram.ChartAreas.Add(chartArea6);
+            legend6.Enabled = false;
+            legend6.Name = "Legend1";
+            this.pr_histogram.Legends.Add(legend6);
             this.pr_histogram.Location = new System.Drawing.Point(0, 0);
-            this.pr_histogram.Margin = new System.Windows.Forms.Padding(2);
+            this.pr_histogram.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.pr_histogram.Name = "pr_histogram";
-            series16.ChartArea = "ChartArea1";
-            series16.Legend = "Legend1";
-            series16.Name = "Series1";
-            this.pr_histogram.Series.Add(series16);
+            series8.ChartArea = "ChartArea1";
+            series8.Legend = "Legend1";
+            series8.Name = "Series1";
+            this.pr_histogram.Series.Add(series8);
             this.pr_histogram.Size = new System.Drawing.Size(320, 370);
             this.pr_histogram.TabIndex = 0;
             this.pr_histogram.Text = "chart3";
-            title16.Name = "Title1";
-            title16.Text = "Power ratio per region";
-            this.pr_histogram.Titles.Add(title16);
+            title8.Name = "Title1";
+            title8.Text = "Power ratio per region";
+            this.pr_histogram.Titles.Add(title8);
             // 
             // wrk_screen_update
             // 
@@ -841,7 +799,7 @@
             // btn_calc_data
             // 
             this.btn_calc_data.Location = new System.Drawing.Point(1000, 503);
-            this.btn_calc_data.Margin = new System.Windows.Forms.Padding(2);
+            this.btn_calc_data.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btn_calc_data.Name = "btn_calc_data";
             this.btn_calc_data.Size = new System.Drawing.Size(65, 23);
             this.btn_calc_data.TabIndex = 26;
@@ -852,7 +810,7 @@
             // btn_clear_panel
             // 
             this.btn_clear_panel.Location = new System.Drawing.Point(504, 557);
-            this.btn_clear_panel.Margin = new System.Windows.Forms.Padding(2);
+            this.btn_clear_panel.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btn_clear_panel.Name = "btn_clear_panel";
             this.btn_clear_panel.Size = new System.Drawing.Size(65, 23);
             this.btn_clear_panel.TabIndex = 27;
@@ -864,19 +822,19 @@
             // 
             this.btn_display_all.AutoSize = true;
             this.btn_display_all.Location = new System.Drawing.Point(720, 59);
-            this.btn_display_all.Margin = new System.Windows.Forms.Padding(2);
+            this.btn_display_all.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btn_display_all.Name = "btn_display_all";
             this.btn_display_all.Size = new System.Drawing.Size(112, 17);
             this.btn_display_all.TabIndex = 28;
             this.btn_display_all.Text = "Display all sensors";
             this.btn_display_all.UseVisualStyleBackColor = true;
             // 
-            // toolStripLabel5
+            // valvesSettingsToolStripMenuItem
             // 
-            this.toolStripLabel5.Name = "toolStripLabel5";
-            this.toolStripLabel5.Size = new System.Drawing.Size(35, 36);
-            this.toolStripLabel5.Text = "100%";
-            this.toolStripLabel5.Click += new System.EventHandler(this.toolStripLabel5_Click);
+            this.valvesSettingsToolStripMenuItem.Name = "valvesSettingsToolStripMenuItem";
+            this.valvesSettingsToolStripMenuItem.Size = new System.Drawing.Size(96, 22);
+            this.valvesSettingsToolStripMenuItem.Text = "Valves Settings";
+            this.valvesSettingsToolStripMenuItem.Click += new System.EventHandler(this.valvesSettingsToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -1004,10 +962,6 @@
         private System.Windows.Forms.Button btn_clear_panel;
         private System.Windows.Forms.CheckBox btn_display_all;
         private System.Windows.Forms.ToolStripMenuItem valvesSettingsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripLabel toolStripLabel2;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-        private System.Windows.Forms.ToolStripLabel toolStripTextBox1;
-        private System.Windows.Forms.ToolStripLabel toolStripLabel5;
     }
 }
 

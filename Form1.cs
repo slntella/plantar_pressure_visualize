@@ -258,6 +258,11 @@ namespace Semester_Project_Plantar_Pressure
 
         }
 
+        private void num_disp_battery_level_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
         private void Apply_rec_fr_Click(object sender, EventArgs e)
         {
             if (rec_state)
@@ -276,6 +281,8 @@ namespace Semester_Project_Plantar_Pressure
 
             string rec_len_str = rec_l_time.ToString(@"mm\:ss\:fff");
             lbl_rec_len.Text = rec_len_str;
+
+            toolStripLabel5.Text = Settings_form.bt_sensor.set_bat_level();
 
             sld_rec_time.Maximum = (int)rec_length.ElapsedMilliseconds;
             txt_max_length.Text = rec_len_str;
@@ -558,6 +565,42 @@ namespace Semester_Project_Plantar_Pressure
         {
             valves_states = new ValvesSate();
             valves_states.Show();
+        }
+
+        private void drawing_pannel_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void chrt_mean_var_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void toolStripLabel3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lbl_rec_len_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void toolStripLabel2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+
+        private void toolStripLabel5_Click(object sender, EventArgs e)
+        {
+            toolStripLabel5.Text = Settings_form.bt_sensor.set_bat_level();
         }
     }
 }
